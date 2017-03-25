@@ -154,7 +154,7 @@ void Menu(Inventory &inventory)
             {
                 int new_amount = User_Inputted_Number(ITEM_QUANTITY_PROMPT, INVALID_INPUT, ITEM_INVALID_QUANTITY, MINIMUM_QUANTITY, MAXIMUM_QUANTITY);
                 inventory.Update_Quantity(key, new_amount);
-                cout << "\nItem was successfully updated!\n";
+                cout << "Item was successfully updated!\n";
             }
             
             else

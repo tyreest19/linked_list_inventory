@@ -19,12 +19,7 @@ struct Item
     string Name;
     string Key;
     int Quantity;
-//    bool operator==(const Item& item);
 };
-//bool Item::operator==(const Item& item)
-//{
-//    return (this->Name == item.Name) && (this->Key == item.Key) && (this->Quantity == item.Quantity);
-//};
 
 
 #endif /* Item_h */

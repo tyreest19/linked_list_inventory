@@ -17,6 +17,7 @@ using namespace std;
 
 Inventory:: Inventory()
 {
+    head = nullptr;
     length = 0;
 }
 
@@ -35,7 +36,27 @@ bool Inventory:: Is_Empty()
 
 void Inventory:: Add_New_Item(Item new_item)
 {
-    inventory[length] = new_item;
+    {
+        Node *traversal_node;
+        Node *new_node;
+        new_node = new Node;
+        new_node->item = new_item;
+        
+        if (!head)
+        {
+            head = new_node;
+        }
+        
+        else
+        {
+            traversal_node = head;
+            while (traversal_node->next)
+            {
+                traversal_node = traversal_node->next;
+            }
+            traversal_node->next = new_node;
+        }
+    }
     length++;
 }
 
@@ -54,14 +75,22 @@ void Inventory:: Create_Investory(int desired_upper_bound)
 
 int Inventory:: Get_Quantity(string key)
 {
-    for (int i = 0; i < length; i++)
+    int quantity = -1;
+    bool found = false;
+    Node *traversal_node = head;
+    
+    while (traversal_node && !found)
     {
-        if (inventory[i].Key == key)
+        if (traversal_node->item.Key == key)
         {
-            return inventory[i].Quantity;
+            quantity = traversal_node->item.Quantity;
+            found = true;
         }
+        
+        traversal_node = traversal_node->next;
     }
-    return -1;
+    
+    return quantity;
 }
 
 //============================================================================================
@@ -71,12 +100,18 @@ int Inventory:: Get_Quantity(string key)
 
 void Inventory:: Update_Quantity(string key, int new_quantity)
 {
-    for (int i = 0; i < length; i++)
+    bool found = false;
+    Node *traversal_node = head;
+    
+    while (traversal_node && !found)
     {
-        if (inventory[i].Key == key)
+        if (traversal_node->item.Key == key)
         {
-            inventory[i].Quantity += new_quantity;
+            traversal_node->item.Quantity += new_quantity;
+            found = true;
         }
+        
+        traversal_node = traversal_node->next;
     }
 }
 
@@ -86,16 +121,38 @@ void Inventory:: Update_Quantity(string key, int new_quantity)
 
 void Inventory:: Delete_Item(string key)
 {
-    for (int i = 0; i < length; i++)
     {
-        if (inventory[i].Key == key)
+        Node *previous_node = nullptr;
+        Node *traversal_node = nullptr;
+        
+        if ((head->item.Key == key) && head !=nullptr)
         {
-            Item temp = inventory[i + 1];
-            inventory[i + 1] = inventory[i];
-            inventory[i] = temp;
+            traversal_node = head->next;
+            delete head;
+            head = traversal_node;
+        }
+        
+        else
+        {
+            traversal_node = head;
+            bool found_node = false;
+            while (traversal_node != nullptr && !found_node)
+            {
+                if ((traversal_node->item.Key == key))
+                {
+                    previous_node->next = traversal_node->next;
+                    delete traversal_node;
+                    found_node = true;
+                }
+                else
+                {
+                    previous_node = traversal_node;
+                    traversal_node = traversal_node->next;
+                }
+            }
         }
     }
-    length -= 1;
+    length--;
 }
 
 //============================================================================================
@@ -108,30 +165,24 @@ void Inventory:: Print_Inventory(int order_code, bool ascending_order)
 {
     if (order_code == 1 && ascending_order)
     {
-        Ascending_Sort_Inventory_By_Name();
-    }
-    
-    else if (order_code == 1 && !ascending_order)
-    {
-        Descending_Sort_Inventory_By_Name();
+        Sort_Inventory_By_Name(ascending_order);
     }
     
     else if (order_code == 2 && ascending_order)
     {
-        Ascending_Sort_Inventory_By_Key();
+        Sort_Inventory_By_Key(ascending_order);
     }
     
-    else if (order_code == 2 && !ascending_order)
+    Node *traversal_node = head;
+    int count = 1;
+    while (traversal_node)
     {
-        Descending_Sort_Inventory_By_Key();
-    }
-    
-    for (int i = 0; i < length; i++)
-    {
-        cout << "item #" << i + 1 << "\n";
-        cout << "item name: " << inventory[i].Name << "\n";
-        cout << "item key: " << inventory[i].Key << "\n";
-        cout << "item quantity: " << inventory[i].Quantity << "\n\n";
+        cout << "Item #" << count << "\n";
+        cout << "Item Name: " << traversal_node->item.Name << "\n";
+        cout << "Item Key: " << traversal_node->item.Key << "\n";
+        cout << "Item Quantity: " << traversal_node->item.Quantity << "\n\n";
+        count++;
+        traversal_node = traversal_node->next;
     }
 }
 
@@ -139,18 +190,41 @@ void Inventory:: Print_Inventory(int order_code, bool ascending_order)
 // Sorts items in ascending baised off of their name.
 //============================================================================================
 
-void Inventory:: Ascending_Sort_Inventory_By_Name()
+void Inventory:: Sort_Inventory_By_Name(bool ascending_order)
 {
-    for (int i = 0; i < length; i++)
+    bool swap;
+    if (ascending_order == 1)
     {
-        for (int j = 0; j < length; j++)
+        do {
+            swap = false;
+            for (Node *traversal_node = head; traversal_node->next; traversal_node = traversal_node->next)
         {
-            if (inventory[i].Name < inventory[j].Name) {
-                Item temp = inventory[i];
-                inventory[i] = inventory[j];
-                inventory[j] = temp;
+                if (traversal_node->item.Name > traversal_node->next->item.Name)
+                {
+                    Item temp = traversal_node->item;
+                    traversal_node->item = traversal_node->next->item;
+                    traversal_node->next->item = temp;
+                    swap = true;
+                }
             }
-        }
+        } while (swap);
+    }
+    
+    else if (ascending_order == 0)
+    {
+        do {
+            swap = false;
+            for (Node *traversal_node = head; traversal_node->next; traversal_node = traversal_node->next)
+            {
+                if (traversal_node->item.Name < traversal_node->next->item.Name)
+                {
+                    Item temp = traversal_node->next->item;
+                    traversal_node->next->item = traversal_node->item;
+                    traversal_node->next->item = temp;
+                    swap = true;
+                }
+            }
+        } while (swap);
     }
 }
 
@@ -158,56 +232,41 @@ void Inventory:: Ascending_Sort_Inventory_By_Name()
 // Sorts items in ascending baised off of their key.
 //============================================================================================
 
-void Inventory:: Ascending_Sort_Inventory_By_Key()
+void Inventory:: Sort_Inventory_By_Key(bool ascending_order)
 {
-    for (int i = 0; i < length; i++)
+    bool swap;
+    if (ascending_order == 1)
     {
-        for (int j = 0; j < length; j++)
-        {
-            if (inventory[i].Key < inventory[j].Key) {
-                Item temp = inventory[i];
-                inventory[i] = inventory[j];
-                inventory[j] = temp;
+        do {
+            swap = false;
+            for (Node *traversal_node = head; traversal_node->next; traversal_node = traversal_node->next)
+            {
+                if (traversal_node->item.Key > traversal_node->next->item.Key)
+                {
+                    Item temp = traversal_node->item;
+                    traversal_node->item = traversal_node->next->item;
+                    traversal_node->next->item = temp;
+                    swap = true;
+                }
             }
-        }
+        } while (swap);
     }
-}
-
-//============================================================================================
-// Sorts items in descending baised off of their name.
-//============================================================================================
-
-void Inventory:: Descending_Sort_Inventory_By_Name()
-{
-    for (int i = 0; i < length; i++)
+    
+    else if (ascending_order == 0)
     {
-        for (int j = 0; j < length; j++)
-        {
-            if (inventory[i].Name > inventory[j].Name) {
-                Item temp = inventory[i];
-                inventory[i] = inventory[j];
-                inventory[j] = temp;
+        do {
+            swap = false;
+            for (Node *traversal_node = head; traversal_node->next; traversal_node = traversal_node->next)
+            {
+                if (traversal_node->item.Key < traversal_node->next->item.Key)
+                {
+                    Item temp = traversal_node->next->item;
+                    traversal_node->next->item = traversal_node->item;
+                    traversal_node->next->item = temp;
+                    swap = true;
+                }
             }
-        }
-    }
-}
-
-//============================================================================================
-// Sorts items in descending baised off of their key.
-//============================================================================================
-
-void Inventory:: Descending_Sort_Inventory_By_Key()
-{
-    for (int i = 0; i < length; i++)
-    {
-        for (int j = 0; j < length; j++)
-        {
-            if (inventory[i].Key > inventory[j].Key) {
-                Item temp = inventory[i];
-                inventory[i] = inventory[j];
-                inventory[j] = temp;
-            }
-        }
+        } while (swap);
     }
 }
 
@@ -228,13 +287,14 @@ bool Inventory:: Is_Full()
 
 bool Inventory:: Does_Item_Exist(string key)
 {
-    bool item_found = false;
-    for (int i = 0; i < length && !item_found; i++)
+    bool found = false;
+    Node *traversal_node = head;
+    
+    while (traversal_node && !found)
     {
-        if (inventory[i].Key == key)
-        {
-            item_found = true;
-        }
+        found = traversal_node->item.Key == key;
+        traversal_node = traversal_node->next;
     }
-    return item_found;
+    
+    return found;
 }

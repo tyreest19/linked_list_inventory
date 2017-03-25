@@ -21,6 +21,12 @@ class Inventory
 {
 public:
     
+    struct Node
+    {
+        Item item;
+        Node* next = nullptr;
+    };
+    
     Inventory();
     bool Is_Empty();
     void Add_New_Item(Item new_item);
@@ -31,14 +37,12 @@ public:
     void Print_Inventory(int order_code, bool ascending_order);
     bool Is_Full();
     bool Does_Item_Exist(string key);
+    Node* head;
 private:
     
     int length;
     int upper_bounds;
-    void Ascending_Sort_Inventory_By_Name();
-    void Descending_Sort_Inventory_By_Name();
-    void Ascending_Sort_Inventory_By_Key();
-    void Descending_Sort_Inventory_By_Key();
-    Item inventory[MAXIMUM_INVETORY_SIZE];
+    void Sort_Inventory_By_Name(bool ascending_order);
+    void Sort_Inventory_By_Key(bool ascending_order);
 };
 #endif /* Inventory_hpp */
