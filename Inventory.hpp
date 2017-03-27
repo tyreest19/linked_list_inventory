@@ -30,7 +30,6 @@ public:
     Inventory();
     bool Is_Empty();
     void Add_New_Item(Item new_item);
-    void Create_Investory(int desired_upper_bound);
     int Get_Quantity(string key);
     void Update_Quantity(string key, int new_quantity);
     void Delete_Item(string key);
@@ -41,7 +40,6 @@ public:
 private:
     
     int length;
-    int upper_bounds;
     void Sort_Inventory_By_Name(bool ascending_order);
     void Sort_Inventory_By_Key(bool ascending_order);
 };

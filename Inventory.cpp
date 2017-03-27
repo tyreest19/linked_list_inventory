@@ -60,14 +60,6 @@ void Inventory:: Add_New_Item(Item new_item)
     length++;
 }
 
-//============================================================================================
-// Sets the maxium length of the inventory.
-//============================================================================================
-
-void Inventory:: Create_Investory(int desired_upper_bound)
-{
-    upper_bounds = desired_upper_bound;
-}
 
 //============================================================================================
 // Enter the key for an item and the method returns the Quantity.
@@ -163,12 +155,12 @@ void Inventory:: Delete_Item(string key)
 
 void Inventory:: Print_Inventory(int order_code, bool ascending_order)
 {
-    if (order_code == 1 && ascending_order)
+    if (order_code == 1)
     {
         Sort_Inventory_By_Name(ascending_order);
     }
     
-    else if (order_code == 2 && ascending_order)
+    else if (order_code == 2)
     {
         Sort_Inventory_By_Key(ascending_order);
     }
@@ -193,7 +185,7 @@ void Inventory:: Print_Inventory(int order_code, bool ascending_order)
 void Inventory:: Sort_Inventory_By_Name(bool ascending_order)
 {
     bool swap;
-    if (ascending_order == 1)
+    if (ascending_order)
     {
         do {
             swap = false;
@@ -210,7 +202,7 @@ void Inventory:: Sort_Inventory_By_Name(bool ascending_order)
         } while (swap);
     }
     
-    else if (ascending_order == 0)
+    else
     {
         do {
             swap = false;
@@ -220,7 +212,7 @@ void Inventory:: Sort_Inventory_By_Name(bool ascending_order)
                 {
                     Item temp = traversal_node->next->item;
                     traversal_node->next->item = traversal_node->item;
-                    traversal_node->next->item = temp;
+                    traversal_node->item = temp;
                     swap = true;
                 }
             }
@@ -235,7 +227,7 @@ void Inventory:: Sort_Inventory_By_Name(bool ascending_order)
 void Inventory:: Sort_Inventory_By_Key(bool ascending_order)
 {
     bool swap;
-    if (ascending_order == 1)
+    if (ascending_order)
     {
         do {
             swap = false;
@@ -252,7 +244,7 @@ void Inventory:: Sort_Inventory_By_Key(bool ascending_order)
         } while (swap);
     }
     
-    else if (ascending_order == 0)
+    else
     {
         do {
             swap = false;
@@ -262,7 +254,7 @@ void Inventory:: Sort_Inventory_By_Key(bool ascending_order)
                 {
                     Item temp = traversal_node->next->item;
                     traversal_node->next->item = traversal_node->item;
-                    traversal_node->next->item = temp;
+                    traversal_node->item = temp;
                     swap = true;
                 }
             }
@@ -278,7 +270,7 @@ void Inventory:: Sort_Inventory_By_Key(bool ascending_order)
 
 bool Inventory:: Is_Full()
 {
-    return length == upper_bounds;
+    return false;
 }
 
 //============================================================================================

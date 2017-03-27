@@ -17,13 +17,10 @@ using namespace std;
 
 int main()
 {
-    cout << "This is an inventory program which mimics an inventory! \n\n";
-    
-    int size_of_inventory = User_Inputted_Number(CREATE_INVENTORY_PROMPT, INVALID_INPUT, INVENTORY_INVALID_SIZE, MINIMUM_INVENTORY_SIZE, MAXIMUM_INVETORY_SIZE);
+    cout << "This is an inventory program which mimics an inventory! \n";
+    cout << "Use the menu to access your inventory! \n\n";
     Inventory inventory;
     string continue_using_menu;
-    inventory.Create_Investory(size_of_inventory);
-    
     do
     {
         Menu(inventory);
